@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const path = require('path');
 
 const courses = require('./routes/api/courses');
 const templates = require('./routes/api/templates');
@@ -25,6 +26,15 @@ app.get('/', (req, res) => res.send('Hello'));
 // User routes
 app.use('/api/courses', courses);
 app.use('/api/templates', templates);
+
+// Server static assests if in production
+if (process.env.NODE_ENV === 'production') {
+    app.use(express.static('client/build'));
+
+    app.get('*', (req, res) => {
+        res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+    })
+}
 
 const port = process.env.PORT || 5000;
 
