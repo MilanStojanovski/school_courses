@@ -1,9 +1,15 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
 
 const courses = require('./routes/api/courses');
+const templates = require('./routes/api/templates');
 
 const app = express();
+
+// Body parser middleware
+app.use(bodyParser.urlencoded({extend: false}));
+app.use(bodyParser.json());
 
 // DB Config
 const db = require('./config/keys').mongoURI;
@@ -18,6 +24,7 @@ app.get('/', (req, res) => res.send('Hello'));
 
 // User routes
 app.use('/api/courses', courses);
+app.use('/api/templates', templates);
 
 const port = process.env.PORT || 5000;
 
